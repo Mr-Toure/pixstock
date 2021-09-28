@@ -13,6 +13,14 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
+     * .
+     */
+    public function albums()
+    {
+        return $this->hasMany(Album::class);
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var string[]

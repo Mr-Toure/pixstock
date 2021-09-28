@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Source extends Model
 {
     use HasFactory;
+
+    public function photo()
+    {
+        return $this->belongsTo(Photo::class);
+    }
 }

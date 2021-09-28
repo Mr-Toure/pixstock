@@ -17,7 +17,7 @@ class CreateAlbumsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->slug('slug');
+            $table->string('slug');
             $table->text('description');
             $table->timestamps();
         });

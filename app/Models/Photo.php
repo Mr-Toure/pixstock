@@ -8,4 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Photo extends Model
 {
     use HasFactory;
+
+    /**
+     * .
+     */
+    public function album()
+    {
+        return $this->belongsTo(Album::class);
+    }
+
+    /**
+     * .
+     */
+    public function sources()
+    {
+        return $this->hasMany(Source::class);
+    }
 }
