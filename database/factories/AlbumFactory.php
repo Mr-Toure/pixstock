@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\album;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AlbumFactory extends Factory
@@ -22,7 +23,9 @@ class AlbumFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_id'=> User::factory(),
+            'title'=> $this->faker->sentence,
+            'description'=> $this->faker->words(10, true),
         ];
     }
 }
