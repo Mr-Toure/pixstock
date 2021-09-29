@@ -15,10 +15,7 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request) //display only page  with data
     {
-        $photos = Photo::whereActive(true)
-            ->with('album.user')
-            ->orderByDesc('created_at')
-            ->paginate();
+        $photos = Photo::with('album.user')->orderByDesc('created_at')->paginate();
         $data = [
             'title'=>config('Photos MIT - '.'app.name'),
             'description'=>'',
