@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -15,7 +16,10 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request) //display only page  with data
     {
-        $photos = Photo::with('album.user')->orderByDesc('created_at')->paginate();
+        $currentPage = request()->query('page', 1);
+        $photos = Cache::rememberForever('photos_'.$currentPage, function (){
+            return Photo::with('album.user')->orderByDesc('created_at')->paginate();
+        });
         $data = [
             'title'=>config('Photos MIT - '.'app.name'),
             'description'=>'',
