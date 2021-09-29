@@ -29,7 +29,9 @@
                                     <h2><a href="#">{{$photo->title}}</a></h2>
                                 </div>
                                 <div class="article-user">
-                                    <img alt="{{$photo->album->user->name}} avatar" src="{{asset('assets/img/avatar/avatar-1.png')}}">
+                                    <a href="">
+                                        <img alt="{{$photo->album->user->name}} avatar" src="{{asset('assets/img/avatar/avatar-1.png')}}">
+                                    </a>
                                     <div class="article-user-details">
                                         <div class="user-detail-name">
                                             <a href="#">{{$photo->album->user->name}}</a>

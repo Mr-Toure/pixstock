@@ -16,3 +16,16 @@ mix.js('resources/js/app.js', 'public/js').postCss('resources/css/app.css', 'pub
     require('tailwindcss'),
     require('autoprefixer'),
 ]);
+
+mix.styles([
+    'public/assets/css/style.css',
+    'public/assets/css/components.css'
+], 'public/css/all.css')
+
+mix.scripts([
+    'public/assets/js/custom.js',
+    'public/assets/js/scripts.js',
+    'public/assets/js/stisla.js'
+], 'public/js/all.js')
+
+.version()
