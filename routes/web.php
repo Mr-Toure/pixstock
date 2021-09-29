@@ -21,6 +21,11 @@ Route::get('/', function () {
 Route::resource('album', AlbumController::class);
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
 
+Route::middleware(['auth', 'verified'])->group(function (){
+    //authentifier et email verifier pour accéder à ces routes
+
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');

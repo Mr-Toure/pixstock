@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -12,6 +13,23 @@ class Photo extends Model
 {
     use HasFactory, HasSlug;
     protected $perPage = 6;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::created(function (){
+            cache::flush();
+        });
+
+        static::updated(function (){
+            cache::flush();
+        });
+
+        static::deleted(function (){
+            cache::flush();
+        });
+    }
 
     protected static function booted()
     {

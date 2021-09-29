@@ -10,6 +10,7 @@ use Spatie\Sluggable\SlugOptions;
 class Album extends Model
 {
     use HasFactory, HasSlug;
+    protected $perPage = 6;
 
     public function getRouteKeyName()
     {

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
@@ -22,7 +24,7 @@ class HomeController extends Controller
         });
         $data = [
             'title'=>config('Photos MIT - '.'app.name'),
-            'description'=>'',
+            'description'=>'Page listant les photos contenus dans'.config('app.name'),
             'heading'=>config('app.name'),
             'photos'=>$photos
         ];

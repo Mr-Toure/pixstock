@@ -3,18 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\album;
+use App\Models\Photo;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class AlbumController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified'])->except('show');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index() //liste des albums de l'utisateur
     {
-        return 'liste des albums';
+        $albums = auth()->user()->albums()
+            ->with('photos', fn ($query) => $query->withoutGlobalScope('active')->orderByDesc('created_at'))
+            ->orderByDesc('updated_at')
+            ->paginate();
+
+        $data = [
+            'title'=>'Mes Album MIT - '.config('app.name'),
+            'description'=>'Page listant mes Albums contenus dans'.config('app.name'),
+            'heading'=>'Mes Albums',
+            'albums'=>$albums,
+        ];
+        return view('album.index', $data);
     }
 
     /**
@@ -24,7 +43,13 @@ class AlbumController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'title'=> $description = $heading = 'Créer un album MIT - '.config('app.name'),
+            'description'=>$description,
+            'heading'=>$heading,
+
+        ];
+        return view('album.create', $data);
     }
 
     /**
