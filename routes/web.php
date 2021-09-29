@@ -15,10 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home.index')->with('title', config('app.name'));
 });
 
 Route::resource('album', AlbumController::class);
+Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

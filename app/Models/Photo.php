@@ -11,6 +11,8 @@ class Photo extends Model
 {
     use HasFactory, HasSlug;
 
+    protected $perPage = 6;
+
     public function getRouteKeyName()
     {
         return'slug';
