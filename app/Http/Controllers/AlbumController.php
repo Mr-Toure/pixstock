@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AlbumRequest;
 use App\Models\album;
+use App\Models\Category;
 use App\Models\Photo;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +31,7 @@ class AlbumController extends Controller
             ->with('photos', fn ($query) => $query->withoutGlobalScope('active')->orderByDesc('created_at'))
             ->orderByDesc('updated_at')
             ->paginate();
-
+        //dd($albums);
         $data = [
             'title'=>'Mes Album MIT - '.config('app.name'),
             'description'=>'Page listant mes Albums contenus dans'.config('app.name'),
@@ -65,14 +67,38 @@ class AlbumController extends Controller
     {
       DB::beginTransaction();
         try {
+            //albums
            $album = Auth::user()->albums()->create($request->validated());
+
+           //categories
+           $categories = explode(',', $request->categories);
+           $categories = collect($categories)->filter(function ($value, $key){
+               return $value!=='';
+           })->all();
+        foreach ($categories as $cat){
+            $category = Category::firstOrCreate(['name'=>trim($cat)]);
+            $album->categories()->attach($category->id);
+
+            //tags
+            $tags = explode(',', $request->tags);
+            $tags = collect($categories)->filter(function ($value, $key){
+                return $value!=='';
+            })->all();
+            foreach ($tags as $t){
+                $tag = Tag::firstOrCreate(['name'=>trim($t)]);
+                $album->tags()->attach($tag->id);
+            }
+        }
         }catch (ValidationException $e){
             DB::rollBack();
             dd($e->getErrors());
         }
       DB::commit();
         $success = 'Album Ajouté';
-        return back()->withSuccess($success);
+        $redirect = route('album.create');
+        return $request->ajax()
+            ? response()->json(['success'=>$success, 'redirect'=>$redirect])
+            : redirect($redirect)->withSuccess($success);
     }
 
     /**

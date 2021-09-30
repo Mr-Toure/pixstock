@@ -56,7 +56,7 @@ class Photo extends Model
     /**
      * .
      */
-    public function album()
+    public function albums()
     {
         return $this->belongsTo(Album::class);
     }
@@ -67,5 +67,10 @@ class Photo extends Model
     public function sources()
     {
         return $this->hasMany(Source::class);
+    }
+
+    public function tags()
+    {
+        return $this->morphedByMany(Tag::class, 'taggable')->withTimestamps();
     }
 }

@@ -25,7 +25,9 @@ class AlbumRequest extends FormRequest
     {
         return [
             'title'=> ['required','max:191'],
-            'description'=> ['required']
+            'description'=> ['required'],
+            'categories'=> ['required','max:191'],
+            'tags'=> ['required','max:191']
         ];
     }
 }

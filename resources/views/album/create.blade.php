@@ -43,21 +43,20 @@
                                         @enderror
                                     </div>
 
-                                   {{-- <div class="form-group">
+                                   <div class="form-group">
                                         <label for="categories">Categories séprarées par des virgules</label>
                                         <input type="text" name="categories" value="{{ old('categories') }}" placeholder="nature, animaux, paysage" class="form-control">
                                         @error('categories')
                                         <div class="error">{{ $message }}</div>
                                         @enderror
                                     </div>
-
                                     <div class="form-group">
                                         <label for="tags">Tags séprarés par des virgules</label>
                                         <input type="text" name="tags" value="{{ old('tags') }}" placeholder="lac, tigre, avion" class="form-control">
                                         @error('tags')
                                         <div class="error">{{ $message }}</div>
                                         @enderror
-                                    </div>--}}
+                                    </div>
 
                                     <div class="card-footer text-right">
                                         <button class="btn btn-primary mr-1" type="submit">Submit</button>
