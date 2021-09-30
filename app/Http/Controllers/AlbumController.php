@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlbumRequest;
 use App\Models\album;
 use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Nette\Schema\ValidationException;
 
 class AlbumController extends Controller
 {
@@ -58,9 +61,18 @@ class AlbumController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AlbumRequest $request)
     {
-        //
+      DB::beginTransaction();
+        try {
+           $album = Auth::user()->albums()->create($request->validated());
+        }catch (ValidationException $e){
+            DB::rollBack();
+            dd($e->getErrors());
+        }
+      DB::commit();
+        $success = 'Album Ajouté';
+        return back()->withSuccess($success);
     }
 
     /**
