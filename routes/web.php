@@ -19,10 +19,13 @@ Route::get('/', function () {
 });
 
 Route::resource('album', AlbumController::class);
+
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function (){
     //authentifier et email verifier pour accéder à ces routes
+    Route::get('photos/create/{album}',[\App\Http\Controllers\PhotoController::class, 'create'])->name('photos.create');
+    Route::post('photos/store/{album}',[\App\Http\Controllers\PhotoController::class, 'store'])->name('photos.store');
 
 });
 

@@ -29,7 +29,7 @@
                                     <div class="article-image">
                                         <a href="{{route('album.show',[$album->slug])}}">
 
-                                            <img width="350" height="233" src="{{$album->photos[0]->thumbnail_url}}" alt="{{$album->title}}">
+                                            <img width="350" height="233" src="{{ $album->photos[0]->thumbnail_url }}" alt="{{$album->title}}">
                                         </a>
                                     </div>
                                 </div>

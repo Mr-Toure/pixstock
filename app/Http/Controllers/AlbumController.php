@@ -31,7 +31,7 @@ class AlbumController extends Controller
             ->with('photos', fn ($query) => $query->withoutGlobalScope('active')->orderByDesc('created_at'))
             ->orderByDesc('updated_at')
             ->paginate();
-        //dd($albums);
+
         $data = [
             'title'=>'Mes Album MIT - '.config('app.name'),
             'description'=>'Page listant mes Albums contenus dans'.config('app.name'),
@@ -95,7 +95,7 @@ class AlbumController extends Controller
         }
       DB::commit();
         $success = 'Album Ajouté';
-        $redirect = route('album.create');
+        $redirect = route('photos.create',[$album->slug]);
         return $request->ajax()
             ? response()->json(['success'=>$success, 'redirect'=>$redirect])
             : redirect($redirect)->withSuccess($success);
