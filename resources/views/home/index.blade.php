@@ -20,13 +20,15 @@
                         <article class="article article-style-c">
                             <div class="article-header">
                                 <div class="article-image">
-                                    <img width="350" height="233" src="{{$photo->thumbnail_url}}" alt="{{$photo->title}}">
+                                    <a href="{{route('photos.show',[$photo->slug])}}">
+                                        <img width="350" height="233" src="{{$photo->thumbnail_url}}" alt="{{$photo->title}}">
+                                    </a>
                                 </div>
                             </div>
                             <div class="article-details">
                                 <div class="article-category"><div class="bullet"></div> <a href="#">{{$photo->created_at->diffForHumans()}}</a></div>
                                 <div class="article-title">
-                                    <h2><a href="#">{{$photo->title}}</a></h2>
+                                    <h2><a href="{{route('photos.show',[$photo->slug])}}">{{$photo->title}}</a></h2>
                                 </div>
                                 <div class="article-user">
                                     <a href="">

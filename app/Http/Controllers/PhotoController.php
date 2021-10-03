@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PhotoRequest;
 use App\Jobs\ResizePhoto;
 use App\Models\Album;
+use App\Models\Category;
 use App\Models\Photo;
+use App\Models\Source;
 use App\Models\Tag;
+use App\Notifications\PhotoDownloaded;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB, Illuminate\Support\Facades\Storage, Illuminate\Support\Str, Illuminate\Support\Facades\Mail;
 use Image;
 use Nette\Schema\ValidationException;
+use App\Mail\PhotoDownloaded as MailPhoto;
 
 class PhotoController extends Controller
 {
@@ -79,6 +83,55 @@ class PhotoController extends Controller
 
     public function show(Photo $photo)
     {
+        $photo->load('tags:name,slug', 'album.tags:name,slug', 'album.categories:name,slug', 'sources');
 
+        // dd($photo);
+        $tags = collect($photo->tags)->merge(collect($photo->album->tags))->unique();
+
+        $categories = $photo->album->categories;
+
+        $data = [
+            'title' => $photo->title.' - '.config('app.name'),
+            'description' => $photo->title.'. '.$tags->implode('name', ', ').' '.$categories->implode('name', ', '),
+            'photo' => $photo,
+            'tags' => $tags,
+            'categories' => $categories,
+            'heading' => $photo->title,
+        ];
+        return view('photo.show', $data);
+    }
+
+    public function download()
+    {
+        request()->validate([
+            'source' => ['required', 'exists:sources,id'],
+        ]);
+
+        $source = Source::findOrFail(request('source'));
+        $source->load('photo.album.user');
+
+        abort_if(! $source->photo->active, 403);
+
+        if(auth()->id() !== $source->photo->album->user_id){
+            $source->photo->album->user->notify(new PhotoDownloaded($source, $source->photo, auth()->user()));
+
+            Mail::to(auth()->user())->send(new MailPhoto($source, auth()->user()));
+        }
+
+       /* $download = $source->photo->downloads()->create([
+            'user_id' => auth()->id(),
+            'width' => $source->width,
+            'height' => $source->height,
+            'size' => Storage::size($source->path),
+            'ip_address' => request()->ip(),
+        ]);*/
+
+        return Storage::download($source->path);
+    }
+
+    public function readAll()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back();
     }
 }

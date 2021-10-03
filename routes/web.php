@@ -23,12 +23,15 @@ Route::resource('albums', AlbumController::class);
 
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
 
-Route::get('photo/{photo}', [PhotoController::class,'show'])->name('photos.show');
+//Route::get('photo/{photo}', [PhotoController::class,'show'])->name('photos.show');
 
 Route::middleware(['auth', 'verified'])->group(function (){
     //authentifier et email verifier pour accéder à ces routes
     Route::get('photos/create/{album}',[PhotoController::class, 'create'])->name('photos.create');
     Route::post('photos/store/{album}',[PhotoController::class, 'store'])->name('photos.store');
+    Route::get('photo/{photo}', [PhotoController::class,'show'])->name('photos.show');
+    Route::post('download', [PhotoController::class, 'download'])->name('photos.download');
+    Route::get('read-all', [PhotoController::class, 'readAll'])->name('notifications.read');
 
 });
 

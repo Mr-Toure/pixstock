@@ -4035,16 +4035,96 @@ __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/alpine.js");
 
 $(document).ready(function () {
   var ajaxForm = $('form.ajax-form');
-  $(ajaxForm).each(function () {
+  var progress = $('#progress');
+  var progressbar = $(progress).find('#progressbar');
+  var withFile = $('form.withFile');
+  $(withFile).each(function () {
     var _this = this;
 
     $(this).on('submit', function (e) {
       e.preventDefault();
-      var method = $(_this).find('input[name="_method"]').val() || $(_this).attr('method');
-      var data = $(_this).serialize();
+      var form = $(_this);
+      var method = $(_this).find('input[name="_method"').val() || $(_this).attr('method');
+      var url = $(_this).attr('action');
+      var data = new FormData(_this);
+      var button = $(_this).find('button');
+      $(button).prop('disabled', true);
+      var inputFile = $(_this).find('input[type="file"]');
+      var file = $(inputFile).get(0).files;
+
+      if ($(file).length) {
+        var filename = $(inputFile).get(0).files[0].name;
+        data.append(filename, $(inputFile.get(0).files[0]));
+        $(progress).show();
+        var config = {
+          url: url,
+          method: method,
+          data: data,
+          responseType: 'json',
+          onUploadProgress: function onUploadProgress(e) {
+            var percentCompleted = Math.round(e.loaded * 100 / e.total);
+            console.log(percentCompleted);
+            $(progressbar).width(percentCompleted + '%').text(percentCompleted + '%');
+
+            if (percentCompleted == 100) {
+              $(progress).fadeOut().width('0%').text('0%');
+            }
+          }
+        };
+        axios(config).then(function (response) {
+          $(button).prop('disabled', false);
+          console.log(response.data);
+
+          if (response.data.success) {
+            var redirect = response.data.redirect || null;
+            handleSuccess(response.data.success, redirect);
+          }
+        })["catch"](function (error) {
+          $(button).prop('disabled', false);
+
+          if (error.response) {
+            if (error.response.status === 422 && error.response.data.errors) {
+              console.log(error.response.data.errors);
+              var errorString = '';
+              $.each(error.response.data.errors, function (key, value) {
+                errorString += '<p>' + value + '</p>';
+              });
+              sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+                icon: 'error',
+                title: 'Oops... 😕',
+                html: errorString
+              });
+              return false;
+            }
+
+            handleErrors(error.response);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+
+          console.log(error.config);
+        });
+      } else {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+          icon: 'error',
+          title: 'Oup!',
+          text: 'Veuillez ajouter une image'
+        });
+      }
+    });
+  });
+  $(ajaxForm).each(function () {
+    var _this2 = this;
+
+    $(this).on('submit', function (e) {
+      e.preventDefault();
+      var method = $(_this2).find('input[name="_method"]').val() || $(_this2).attr('method');
+      var data = $(_this2).serialize();
       $.ajax({
         type: method,
-        url: $(_this).attr('action'),
+        url: $(_this2).attr('action'),
         data: data,
         dataType: 'json',
         success: function success(response) {
