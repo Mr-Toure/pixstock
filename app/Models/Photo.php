@@ -12,6 +12,7 @@ use Spatie\Sluggable\SlugOptions;
 class Photo extends Model
 {
     use HasFactory, HasSlug;
+    protected $fillable = ['title', 'album_id'];
     protected $perPage = 6;
 
     public static function boot()
@@ -69,8 +70,11 @@ class Photo extends Model
         return $this->hasMany(Source::class);
     }
 
+    /**
+     * Get all of the tags for the post.
+     */
     public function tags()
     {
-        return $this->morphedByMany(Tag::class, 'taggable')->withTimestamps();
+        return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
     }
 }

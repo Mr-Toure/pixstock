@@ -81,7 +81,7 @@ class AlbumController extends Controller
 
             //tags
             $tags = explode(',', $request->tags);
-            $tags = collect($categories)->filter(function ($value, $key){
+            $tags = collect($tags)->filter(function ($value, $key){
                 return $value!=='';
             })->all();
             foreach ($tags as $t){
