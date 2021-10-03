@@ -24,7 +24,7 @@
                                     <div class="alert alert-success">{{ session('success') }}</div>
                                 @endif
 
-                                <form action="{{ route('album.store') }}" method="post" class="ajax-form">
+                                <form action="{{ route('albums.store') }}" method="post" class="ajax-form">
                                     @csrf
 
                                     <div class="form-group">

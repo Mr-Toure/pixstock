@@ -16,7 +16,7 @@
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4><a href="{{ route('album.show', [$album->slug]) }}">Retour à l'album</a></h4>
+                                <h4><a href="{{ route('albums.show', [$album->slug]) }}">Retour à l'album</a></h4>
                             </div>
                             <div class="card-body">
 

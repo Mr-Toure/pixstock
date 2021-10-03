@@ -15,23 +15,6 @@ class Photo extends Model
     protected $fillable = ['title', 'album_id'];
     protected $perPage = 6;
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::created(function (){
-            cache::flush();
-        });
-
-        static::updated(function (){
-            cache::flush();
-        });
-
-        static::deleted(function (){
-            cache::flush();
-        });
-    }
-
     protected static function booted()
     {
         static::addGlobalScope('active', function(Builder $builder){
@@ -57,7 +40,7 @@ class Photo extends Model
     /**
      * .
      */
-    public function albums()
+    public function album()
     {
         return $this->belongsTo(Album::class);
     }

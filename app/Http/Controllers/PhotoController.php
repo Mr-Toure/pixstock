@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PhotoRequest;
 use App\Jobs\ResizePhoto;
 use App\Models\Album;
+use App\Models\Photo;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB, Illuminate\Support\Facades\Storage, Illuminate\Support\Str, Illuminate\Support\Facades\Mail;
@@ -74,5 +75,10 @@ class PhotoController extends Controller
         $success = 'Photo ajoutée avec success';
         $redirect =  redirect(route('photos.create', [$album->slug]));
         return $redirect->withSuccess($success);
+    }
+
+    public function show(Photo $photo)
+    {
+
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Photo;
+use Illuminate\Support\Facades\Cache;
 
 class PhotoObserver
 {
@@ -14,7 +15,7 @@ class PhotoObserver
      */
     public function created(Photo $photo)
     {
-        //
+        cache::flush();
     }
 
     /**
@@ -25,7 +26,7 @@ class PhotoObserver
      */
     public function updated(Photo $photo)
     {
-        //
+        cache::flush();
     }
 
     /**
@@ -36,7 +37,7 @@ class PhotoObserver
      */
     public function deleted(Photo $photo)
     {
-        //
+        cache::flush();
     }
 
     /**

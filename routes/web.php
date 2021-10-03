@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\PhotoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,14 +19,16 @@ Route::get('/', function () {
     return view('home.index')->with('title', config('app.name'));
 });
 
-Route::resource('album', AlbumController::class);
+Route::resource('albums', AlbumController::class);
 
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
 
+Route::get('photo/{photo}', [PhotoController::class,'show'])->name('photos.show');
+
 Route::middleware(['auth', 'verified'])->group(function (){
     //authentifier et email verifier pour accéder à ces routes
-    Route::get('photos/create/{album}',[\App\Http\Controllers\PhotoController::class, 'create'])->name('photos.create');
-    Route::post('photos/store/{album}',[\App\Http\Controllers\PhotoController::class, 'store'])->name('photos.store');
+    Route::get('photos/create/{album}',[PhotoController::class, 'create'])->name('photos.create');
+    Route::post('photos/store/{album}',[PhotoController::class, 'store'])->name('photos.store');
 
 });
 
